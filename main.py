@@ -1,6 +1,9 @@
 import json
 import time
 import paho.mqtt.client as mqttclient
+import subprocess
+import re
+
 print("Iot Gateway")
 
 BROKER_ADDRESS = "demo.thingsboard.io"
@@ -51,7 +54,29 @@ counter = 0
 longitude = 106.7
 latitude = 10.6
 
+
+def getCurentLocation():
+    p = subprocess.Popen(["powershell.exe", "Add-Type -A System.Device;($a=[Device.Location.GeoCoordinateWatcher]::new()).Start();for(;($b=$a|% Po*n|% L*)|% I*){}$b|select L*e"],
+                         stdin=sp.PIPE, stdout=sp.PIPE, stderr=subprocess.STDOUT, text=True)
+    p.communicate()
+    (out, err) = p.communicate()
+    # output :
+    #
+    #     Latitude        Longitude
+    #     --------        ---------
+    #     18.476689671821 105.713650936646
+    #
+    out = re.split('\n', out)
+
+    outt = out[3].split(' ')  # out[3]: 18.476689671821 105.713650936646
+    global latitude
+    global longitude
+    latitude = float(outt[0])
+    longitude = float(outt[1])
+
+
 while True:
+    getCurentLocation()
     collect_data = {'temperature': temp,
                     'humidity': humi, 'light': light_intesity, 'longitude': longitude, 'latitude': latitude}
     temp += 1
