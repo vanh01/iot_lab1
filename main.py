@@ -55,7 +55,7 @@ longitude = 106.7
 latitude = 10.6
 
 
-def getCurentLocation():
+def getCurrentLocation():
     p = subprocess.Popen(["powershell.exe", "Add-Type -A System.Device;($a=[Device.Location.GeoCoordinateWatcher]::new()).Start();for(;($b=$a|% Po*n|% L*)|% I*){}$b|select L*e"],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     p.communicate()
@@ -76,11 +76,11 @@ def getCurentLocation():
 
 
 while True:
-    getCurentLocation()
+    getCurrentLocation()
     collect_data = {'temperature': temp,
                     'humidity': humi, 'light': light_intesity, 'longitude': longitude, 'latitude': latitude}
     temp += 1
     humi += 1
     light_intesity += 1
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
-    time.sleep(5)
+    time.sleep(10)
