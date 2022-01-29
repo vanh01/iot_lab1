@@ -57,7 +57,7 @@ latitude = 10.6
 
 def getCurentLocation():
     p = subprocess.Popen(["powershell.exe", "Add-Type -A System.Device;($a=[Device.Location.GeoCoordinateWatcher]::new()).Start();for(;($b=$a|% Po*n|% L*)|% I*){}$b|select L*e"],
-                         stdin=sp.PIPE, stdout=sp.PIPE, stderr=subprocess.STDOUT, text=True)
+                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     p.communicate()
     (out, err) = p.communicate()
     # output :
